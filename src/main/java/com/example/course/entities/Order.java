@@ -33,7 +33,7 @@ public class Order implements Serializable{
 	
 	private Integer orderStatus;
 	
-	@ManyToOne // informa o relacionamento "muitos para um" com a tabela user
+	@ManyToOne // informa o relacionamento "muitos para um" com a tabela User
 	@JoinColumn(name = "client_id") //insere a coluna "client_id"
 	private User client;
 
