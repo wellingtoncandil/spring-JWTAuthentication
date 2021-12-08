@@ -1,7 +1,9 @@
 package com.example.course.entities;
 
+import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.course.entities.enums.OrderStatus;
@@ -16,7 +19,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "tb_order") //faz com que o nome da tabela no bd seja "tb_order"
-public class Order {
+public class Order implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +31,15 @@ public class Order {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
 	
-	private int orderStatus;
+	private Integer orderStatus;
 	
 	@ManyToOne // informa o relacionamento "muitos para um" com a tabela user
 	@JoinColumn(name = "client_id") //insere a coluna "client_id"
 	private User client;
 
+	@OneToMany(mappedBy= "id.order") // o OrderItem contem o "id" que por sua vez contem o order
+	private Set<OrderItem> items = new HashSet<>();
+	
 	public Order() {
 	}
 	
@@ -39,8 +47,12 @@ public class Order {
 		super();
 		this.id = id;
 		this.moment = moment;
-		this.client = client;
 		setOrderStatus(orderStatus);
+		this.client = client;
+	}
+
+	public Set<OrderItem> getItems() {
+		return items;
 	}
 
 	public OrderStatus getOrderStatus() {
@@ -79,9 +91,11 @@ public class Order {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -91,6 +105,11 @@ public class Order {
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		return Objects.equals(id, other.id);
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }
