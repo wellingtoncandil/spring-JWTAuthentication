@@ -1,8 +1,11 @@
 package com.example.course.resources;
 
 import java.net.URI;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
+
+import javax.security.auth.login.LoginException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.course.entities.User;
 import com.example.course.service.UserService;
+import com.example.course.util.Util;
 
 @RestController
 @RequestMapping(value= "/users")
@@ -39,7 +43,7 @@ public class UserResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> insert(@RequestBody User obj){//annotation que informa a chegada do objeto em modo JSON para que seja desserializado para um obj java
+	public ResponseEntity<User> insert(@RequestBody User obj) throws Exception{//annotation que informa a chegada do objeto em modo JSON para que seja desserializado para um obj java
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();//cria uma URL para o obj inserido
 		return ResponseEntity.created(uri).body(obj); //mostra o obj criado e o local (url) do mesmo
@@ -56,4 +60,17 @@ public class UserResource {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok(obj);
 	}
+	
+	@PostMapping(value ="/login")
+	public ResponseEntity<User> login(@RequestBody User obj) throws NoSuchAlgorithmException, LoginException{
+		User user = service.loginUser(obj.getEmail(), Util.md5(obj.getPassword()));
+		return ResponseEntity.ok().body(user);
+	}
+	
+	/*@GetMapping(value = "/email/{email}")
+	public ResponseEntity<User> findByEmail(@PathVariable String email){
+		User em = service.findByEmail(email);
+		User u = new User(em.getEmail(), em.getPassword());
+		return ResponseEntity.ok().body(u);
+	}*/
 }

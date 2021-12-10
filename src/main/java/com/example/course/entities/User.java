@@ -32,6 +32,11 @@ public class User implements Serializable{
 	@OneToMany(mappedBy = "client")// informa que "orders" é associado como um para muitos com a tabela Order no bd,e mapeado pela chave client
 	private List<Order> orders = new ArrayList<>();
 	
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+	
 	public User() {
 	}
 
