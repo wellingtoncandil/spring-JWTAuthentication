@@ -32,4 +32,10 @@ public class CategoryResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@GetMapping(value="/name/{name}")
+	public ResponseEntity<Category> findByName(@PathVariable String name){
+		Category cat = service.findByName(name);
+		return ResponseEntity.ok(cat);
+	}
+	
 }

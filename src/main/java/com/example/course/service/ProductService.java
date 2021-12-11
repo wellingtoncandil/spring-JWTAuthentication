@@ -22,4 +22,8 @@ public class ProductService {
 	public Optional<Product> findById(Long id) {
 		return repository.findById(id);
 	}
+	
+	public Product insert(Product obj) {
+		return repository.save(obj);
+	}
 }

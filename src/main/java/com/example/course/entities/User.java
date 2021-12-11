@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,9 +24,13 @@ public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)//definição de estratégia de auto incremento
 	private Long id;
+	@NotNull
 	private String name;
+	@NotNull
 	private String email;
+	@NotNull
 	private String phone;
+	@NotNull
 	private String password;
 	
 	@JsonIgnore // jackson annotation que é usada para ignorar a lista de propriedades no json, evitando assim um loop infinito

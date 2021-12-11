@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,9 +27,13 @@ public class Product implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotNull
 	private String name;
+	@NotNull
 	private String description;
+	@NotNull
 	private Double price;
+
 	private String imgUrl;
 	
 	@ManyToMany
@@ -42,15 +47,18 @@ public class Product implements Serializable{
 	
 	public Product() {}
 
-	public Product(Long id, String name, String description, Double price, String imgUrl) {
+	public Product(Long id, String name, String description, Double price, String imgUrl, Set<Category> categories ) {
 		super();
 		this.id = id;
-		this.name = name;
+		setName(name);
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
-		
+		for(Category cat:categories) {
+			this.categories.add(cat);
+		}
 	}
+	
 
 	public Set<Category> getCategories() {
 		return categories;
