@@ -2,7 +2,6 @@ package com.example.course.entities;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -18,22 +17,35 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode(exclude = {"name", "description", "price", "imgUrl", "categories", "items"})
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
+	@Getter@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Getter@Setter
 	@NotNull
 	private String name;
+	
+	@Getter@Setter
 	@NotNull
 	private String description;
+	
+	@Getter@Setter
 	@NotNull
 	private Double price;
 
+	@Getter@Setter
 	private String imgUrl;
 	
 	@ManyToMany
@@ -59,49 +71,8 @@ public class Product implements Serializable{
 		}
 	}
 	
-
 	public Set<Category> getCategories() {
 		return categories;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-
-	public String getImgUrl() {
-		return imgUrl;
-	}
-
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
 	}
 
 	@JsonIgnore
@@ -111,22 +82,5 @@ public class Product implements Serializable{
 			set.add(x.getOrder());
 		}
 		return set;
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		return Objects.equals(id, other.id);
 	}
 }

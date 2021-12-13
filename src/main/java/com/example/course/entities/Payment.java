@@ -2,7 +2,6 @@ package com.example.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,72 +11,38 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="tb_payment")
 public class Payment implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	@Getter@Setter
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
+	
+	@Getter@Setter
 	private Instant moment;
 	
+	@Setter
 	@OneToOne
 	@MapsId //mapeamento necessário no relacionamento um para um
 	private Order order;
-	
-	public Payment() {
-	}
-
-	public Payment(Long id, Instant moment, Order order) {
-		super();
-		this.id = id;
-		this.moment = moment;
-		this.order = order;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Instant getMoment() {
-		return moment;
-	}
-
-	public void setMoment(Instant moment) {
-		this.moment = moment;
-	}
 
 	@JsonIgnore
 	public Order getOrder() {
 		return order;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Payment other = (Payment) obj;
-		return Objects.equals(id, other.id);
-	}
 }

@@ -46,6 +46,7 @@ public class TestConfig implements CommandLineRunner{ //classe de configuração
 		Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, u1);
 		Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, u2);
 		Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.PAID, u1);
+		//Order o4 = new Order(null, Instant.now(), OrderStatus.PAID, u1);
 		
 		Category c1 = new Category(null, "Electronics");
 		Category c2 = new Category(null, "Books");
@@ -63,12 +64,10 @@ public class TestConfig implements CommandLineRunner{ //classe de configuração
 		Product p4 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, "", new HashSet<>(Arrays.asList(c3)));
 		Product p5 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "", new HashSet<>(Arrays.asList(c2)));
 		
-		
 		userRepository.saveAll(Arrays.asList(u1, u2));//salva os usuarios no bd passando-os como paramentro para uma lista
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 		categoryRepository.saveAll(Arrays.asList(c1, c2, c3));
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
-
 		
 		/*p1.getCategories().add(c2);
 		p2.getCategories().add(c1);
@@ -86,7 +85,6 @@ public class TestConfig implements CommandLineRunner{ //classe de configuração
 		
 	    orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 	
-		
 		Payment pay = new Payment(null, Instant.parse("2019-07-22T16:21:22Z"), o3);
 		o3.setPayment(pay);
 		
