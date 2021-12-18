@@ -37,16 +37,13 @@ public class UserService {
 
 	public User insert(User user) throws Exception {
 		try {
-			List<User> list = repository.findByEmail(user.getEmail());
-			if (list != null) {
-				for (User x : list) {
-					if (x.getEmail().equals(user.getEmail())) {
-						throw new EmailExistsException("This email is already had registered");
-					}
-				}
+			Optional<User> obj = repository.findByEmail(user.getEmail());
+			if(obj.isEmpty()){
 				String userPass = user.getPassword();
 				userPass = Util.md5(user.getPassword());
 				user.setPassword(userPass);
+			}else {
+				throw new EmailExistsException("This email is already had registered");
 			}
 		}catch (NoSuchAlgorithmException e) {
 			throw new CriptoExistException("Password encryption error");
@@ -80,22 +77,30 @@ public class UserService {
 		user.setEmail(obj.getEmail());
 		user.setPhone(obj.getPhone());
 	}
-	
+
 	public User loginUser(String email, String password) throws LoginException {
 		try {
 			User userLogin = repository.searchLogin(email, password);
-			if(userLogin == null) {
+			if (userLogin == null) {
 				throw new ResourceNotFoundException(email);
-			}else {
+			} else {
 				return userLogin;
 			}
-		}catch (EntityNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(email);
 		}
 	}
 
-	/*
-	public User findByEmail(String email) {
+	public Optional<User> findByEmail(String email) {
 		return repository.findByEmail(email);
-	}*/
+	}
+
+	public Boolean existsByEmail(String email) {
+		return repository.existsByEmail(email);
+	}
+
+	Boolean existsByName(String name) {
+		return repository.existsByName(name);
+	}
+
 }

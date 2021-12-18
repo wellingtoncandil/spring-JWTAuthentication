@@ -14,12 +14,15 @@ import com.example.course.entities.Order;
 import com.example.course.entities.OrderItem;
 import com.example.course.entities.Payment;
 import com.example.course.entities.Product;
+import com.example.course.entities.Role;
 import com.example.course.entities.User;
+import com.example.course.entities.enums.ERole;
 import com.example.course.entities.enums.OrderStatus;
 import com.example.course.repositories.ICategoryRepository;
 import com.example.course.repositories.IOrderItemRepository;
 import com.example.course.repositories.IOrderRepository;
 import com.example.course.repositories.IProductRepository;
+import com.example.course.repositories.IRoleRepository;
 import com.example.course.repositories.IUserRepository;
 
 @Configuration // informa que essa é uma classe de configuração
@@ -36,6 +39,8 @@ public class TestConfig implements CommandLineRunner{ //classe de configuração
 	private IProductRepository productRepository;
 	@Autowired
 	private IOrderItemRepository orderItemRepository;
+	@Autowired
+	private IRoleRepository roleRepository;
 
 	@Override
 	public void run(String... args) throws Exception { //tudo que estiver dentro do método run será executado ao iniciar a aplicação
@@ -47,6 +52,10 @@ public class TestConfig implements CommandLineRunner{ //classe de configuração
 		Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, u2);
 		Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.PAID, u1);
 		//Order o4 = new Order(null, Instant.now(), OrderStatus.PAID, u1);
+		
+		Role role1 = new Role(ERole.ROLE_ADMIN);
+		Role role2 = new Role(ERole.ROLE_MODERATOR);
+		Role role3 = new Role(ERole.ROLE_USER);
 		
 		Category c1 = new Category(null, "Electronics");
 		Category c2 = new Category(null, "Books");
@@ -68,6 +77,7 @@ public class TestConfig implements CommandLineRunner{ //classe de configuração
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 		categoryRepository.saveAll(Arrays.asList(c1, c2, c3));
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
+		roleRepository.saveAll(Arrays.asList(role1, role2, role3));
 		
 		/*p1.getCategories().add(c2);
 		p2.getCategories().add(c1);

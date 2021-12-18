@@ -2,12 +2,18 @@ package com.example.course.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -34,15 +40,27 @@ public class User implements Serializable{
 	private String name;
 	@NotNull
 	private String email;
-	@NotNull
+
 	private String phone;
 	@NotNull
 	private String password;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "tb_user_roles",
+	joinColumns = @JoinColumn(name = "user_id"),
+	inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 	
 	@Setter(AccessLevel.NONE)
 	@JsonIgnore // jackson annotation que é usada para ignorar a lista de propriedades no json, evitando assim um loop infinito
 	@OneToMany(mappedBy = "client")// informa que "orders" é associado como um para muitos com a tabela Order no bd,e mapeado pela chave client
 	private List<Order> orders = new ArrayList<>();
+	
+	public User(String username, String email, String password) {
+		this.name = username;
+		this.email = email;
+		this.password = password;
+	}
 	
 	public User(String email, String password) {
 		this.email = email;
